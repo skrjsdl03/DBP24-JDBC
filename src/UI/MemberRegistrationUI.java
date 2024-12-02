@@ -1,34 +1,33 @@
-package GUI;
+package UI;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class ParkingLotStatusUI {
+public class MemberRegistrationUI {
     public static void show() {
-        JFrame frame = new JFrame("주차장 관리 시스템");
+        JFrame frame = new JFrame("회원 등록");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 400);
+        frame.setSize(800, 600);
         frame.setLayout(new BorderLayout());
 
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setPreferredSize(new Dimension(200, frame.getHeight()));
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
+        frame.add(mainPanel);
+
+        JPanel menuPanel = new JPanel(new GridLayout(0, 1, 10, 10));
         menuPanel.setBackground(Color.WHITE);
+        menuPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
         String[] menuItems = {"회원 정보", "주차장 관리 점검 기록", "주차요금 계산", "차량 입출차 기록", "주차장 현황"};
 //        for (String item : menuItems) {
 //            JButton menuButton = new JButton(item);
-//            menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 //            menuButton.setFocusPainted(false);
 //            menuButton.setBackground(Color.WHITE);
-//            menuButton.setFont(new Font("Malgun Gothic", Font.PLAIN, 14));
-//            menuButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+//            menuButton.setHorizontalAlignment(SwingConstants.LEFT);
 //            menuButton.addActionListener(e -> {
 //                frame.dispose();
 //                switch (item) {
-//                    case "회원 정보":
-//                        MemberRegistrationUI.show();
-//                        break;
 //                    case "주차장 관리 점검 기록":
 //                        ParkingManagementUI.show();
 //                        break;
@@ -38,16 +37,16 @@ public class ParkingLotStatusUI {
 //                    case "차량 입출차 기록":
 //                        ParkingRecordUI.show();
 //                        break;
+//                    case "주차장 현황":
+//                        ParkingStatusUI.show();
+//                        break;
 //                }
 //            });
 //            menuPanel.add(menuButton);
 //        }
+        mainPanel.add(menuPanel, BorderLayout.WEST);
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
-        contentPanel.setBackground(Color.WHITE);
-
-        // 주차장 현황 UI 코드 (생략)...
+        // 회원 등록 패널 생성 코드 (생략)...
 
         frame.setVisible(true);
     }

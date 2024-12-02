@@ -1,12 +1,12 @@
-package GUI;
+package UI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class ParkingRecordUI {
+public class ParkingFeeUI {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ParkingRecordUI().createAndShowGUI());
+        SwingUtilities.invokeLater(() -> new ParkingFeeUI().createAndShowGUI());
     }
 
     private void createAndShowGUI() {
@@ -40,7 +40,8 @@ public class ParkingRecordUI {
             menuButton.setPreferredSize(new Dimension(200, 40));
             menuButton.setMaximumSize(new Dimension(200, 40));
 
-            if (item.equals("차량 입출차 기록")) {
+            // "주차요금 계산" 버튼의 배경색을 회색으로 설정
+            if (item.equals("주차요금 계산")) {
                 menuButton.setBackground(Color.LIGHT_GRAY);
             }
 
@@ -55,10 +56,10 @@ public class ParkingRecordUI {
                         ParkingManagementUI.show(); // 주차장 관리 점검 기록 UI 호출
                         break;
                     case "주차요금 계산":
-                        ParkingFeeUI.show(); // 주차요금 계산 UI 호출
+                        show(); // 주차요금 계산 UI 호출
                         break;
                     case "차량 입출차 기록":
-                        show(); // 현재 UI 호출
+                        ParkingRecordUI.show(); // 차량 입출차 기록 UI 호출
                         break;
                     case "주차장 현황":
                         ParkingStatusUI.show(); // 주차장 현황 UI 호출
@@ -77,7 +78,7 @@ public class ParkingRecordUI {
         // 헤더 패널 생성
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.WHITE);
-        JLabel titleLabel = new JLabel("차량 입/출차 기록", JLabel.LEFT);
+        JLabel titleLabel = new JLabel("주차 요금 계산", JLabel.LEFT);
         titleLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         headerPanel.add(titleLabel, BorderLayout.WEST);
@@ -123,22 +124,19 @@ public class ParkingRecordUI {
         headerPanel.add(searchPanel, BorderLayout.EAST); // 오른쪽에 위치하도록 설정
 
         // 표 데이터와 컬럼 이름 정의
-        String[] columnNames = {"회원ID", "차량번호", "입차시간", "주차장 번호", "주차장 공간 번호"};
+        String[] columnNames = {"회원ID", "차량번호", "입차시간", "출차시간", "요금"};
         Object[][] data = {
-                {"A001", "35가 3872", "24/09/24 09:24:00", "A주차장", "13"},
-                {"A001", "35가 3872", "24/10/22 10:14:00", "A주차장", "2"},
-                {"A001", "35가 3872", "24/10/28 12:14:00", "C주차장", "22"},
-                {"A001", "35가 3872", "24/11/02 15:14:00", "B주차장", "12"}
+                {"A001", "35가 3872", "09:24", "17:00", "10000"}
         };
 
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
-        JTable parkingTable = new JTable(tableModel);
-        parkingTable.setRowHeight(30);
-        parkingTable.setFont(new Font("Malgun Gothic", Font.PLAIN, 14));
-        parkingTable.getTableHeader().setFont(new Font("Malgun Gothic", Font.BOLD, 14));
-        parkingTable.getTableHeader().setReorderingAllowed(false);
+        JTable feeTable = new JTable(tableModel);
+        feeTable.setRowHeight(30);
+        feeTable.setFont(new Font("Malgun Gothic", Font.PLAIN, 14));
+        feeTable.getTableHeader().setFont(new Font("Malgun Gothic", Font.BOLD, 14));
+        feeTable.getTableHeader().setReorderingAllowed(false);
 
-        JScrollPane tableScrollPane = new JScrollPane(parkingTable);
+        JScrollPane tableScrollPane = new JScrollPane(feeTable);
         tableScrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         contentPanel.add(headerPanel, BorderLayout.NORTH);
         contentPanel.add(tableScrollPane, BorderLayout.CENTER);
