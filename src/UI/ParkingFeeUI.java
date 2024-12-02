@@ -1,11 +1,12 @@
-package GUI;
+package UI;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class ParkingStatusUI {
+public class ParkingFeeUI {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ParkingStatusUI().createAndShowGUI());
+        SwingUtilities.invokeLater(() -> new ParkingFeeUI().createAndShowGUI());
     }
 
     private void createAndShowGUI() {
@@ -39,7 +40,8 @@ public class ParkingStatusUI {
             menuButton.setPreferredSize(new Dimension(200, 40));
             menuButton.setMaximumSize(new Dimension(200, 40));
 
-            if (item.equals("주차장 현황")) {
+            // "주차요금 계산" 버튼의 배경색을 회색으로 설정
+            if (item.equals("주차요금 계산")) {
                 menuButton.setBackground(Color.LIGHT_GRAY);
             }
 
@@ -54,13 +56,13 @@ public class ParkingStatusUI {
                         ParkingManagementUI.show(); // 주차장 관리 점검 기록 UI 호출
                         break;
                     case "주차요금 계산":
-                        ParkingFeeUI.show(); // 주차요금 계산 UI 호출
+                        show(); // 주차요금 계산 UI 호출
                         break;
                     case "차량 입출차 기록":
                         ParkingRecordUI.show(); // 차량 입출차 기록 UI 호출
                         break;
                     case "주차장 현황":
-                        show(); // 현재 UI 호출
+                        ParkingStatusUI.show(); // 주차장 현황 UI 호출
                         break;
                 }
             });
@@ -76,7 +78,7 @@ public class ParkingStatusUI {
         // 헤더 패널 생성
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.WHITE);
-        JLabel titleLabel = new JLabel("주차장 현황", JLabel.LEFT);
+        JLabel titleLabel = new JLabel("주차 요금 계산", JLabel.LEFT);
         titleLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         headerPanel.add(titleLabel, BorderLayout.WEST);
@@ -121,43 +123,23 @@ public class ParkingStatusUI {
 
         headerPanel.add(searchPanel, BorderLayout.EAST); // 오른쪽에 위치하도록 설정
 
-        // 상태 표시 패널
-        JPanel statusPanel = new JPanel();
-        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.Y_AXIS));
-        statusPanel.setBackground(Color.WHITE);
-        statusPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        // 표 데이터와 컬럼 이름 정의
+        String[] columnNames = {"회원ID", "차량번호", "입차시간", "출차시간", "요금"};
+        Object[][] data = {
+                {"A001", "35가 3872", "09:24", "17:00", "10000"}
+        };
 
-        JLabel allParkingTitle = new JLabel("모든 주차장", JLabel.CENTER);
-        allParkingTitle.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
-        allParkingTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        statusPanel.add(allParkingTitle);
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+        JTable feeTable = new JTable(tableModel);
+        feeTable.setRowHeight(30);
+        feeTable.setFont(new Font("Malgun Gothic", Font.PLAIN, 14));
+        feeTable.getTableHeader().setFont(new Font("Malgun Gothic", Font.BOLD, 14));
+        feeTable.getTableHeader().setReorderingAllowed(false);
 
-        statusPanel.add(Box.createRigidArea(new Dimension(0, 20))); // 간격 추가
-
-        // 주차장 상태
-        String[] parkingLots = {"A주차장", "B주차장", "C주차장", "D주차장"};
-        String[] statuses = {"원활", "혼잡", "원활", "보통"};
-
-        for (int i = 0; i < parkingLots.length; i++) {
-            JPanel parkingRow = new JPanel();
-            parkingRow.setLayout(new BoxLayout(parkingRow, BoxLayout.X_AXIS));
-            parkingRow.setBackground(Color.WHITE);
-            parkingRow.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            JLabel parkingLabel = new JLabel(parkingLots[i], JLabel.LEFT);
-            parkingLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
-            parkingLabel.setPreferredSize(new Dimension(100, 30));
-            parkingRow.add(parkingLabel);
-
-            JLabel statusLabel = new JLabel(statuses[i], JLabel.LEFT);
-            statusLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
-            parkingRow.add(statusLabel);
-
-            statusPanel.add(parkingRow);
-        }
-
+        JScrollPane tableScrollPane = new JScrollPane(feeTable);
+        tableScrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         contentPanel.add(headerPanel, BorderLayout.NORTH);
-        contentPanel.add(statusPanel, BorderLayout.CENTER);
+        contentPanel.add(tableScrollPane, BorderLayout.CENTER);
 
         // 프레임에 메뉴 패널과 콘텐츠 패널 추가
         frame.add(menuPanel, BorderLayout.WEST);

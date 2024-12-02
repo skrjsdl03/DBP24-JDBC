@@ -1,3 +1,5 @@
+package DB;
+
 import oracle.jdbc.OracleTypes;
 import java.sql.*;
 
@@ -72,7 +74,7 @@ public class DB_Conn_Query {
     }
 
 //    public static void main(String arg[]) throws SQLException {
-//        DB_Conn_Query dbconquery = new DB_Conn_Query();
+//        DB.DB_Conn_Query dbconquery = new DB.DB_Conn_Query();
 //        dbconquery.sqlRun();
 //    }
 }
