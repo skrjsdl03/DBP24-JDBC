@@ -48,7 +48,7 @@ public class ParkingStatusUI {
                 frame.dispose();
                 switch (item) {
                     case "회원 정보":
-                        new ManagementUI(); // 회원 정보 UI 호출
+                        GUI.ManagementUI.show(); // 회원 정보 UI 호출
                         break;
                     case "주차장 관리 점검 기록":
                         ParkingManagementUI.show(); // 주차장 관리 점검 기록 UI 호출

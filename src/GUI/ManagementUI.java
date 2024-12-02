@@ -8,11 +8,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ManagementUI {
-    public ManagementUI() {
-        createAndShowGUI();
-    }
 
-    public void createAndShowGUI() {
+    public static void show() {
         JFrame frame = new JFrame("주차장 관리 시스템");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
@@ -45,7 +42,7 @@ public class ManagementUI {
         // 회원 정보 버튼 클릭 시 ManagementUI 열기
         memberInfoButton.addActionListener(e -> {
             frame.dispose();
-            new ManagementUI();
+            ManagementUI.show();
         });
 
         // 다른 메뉴 항목 버튼 생성
@@ -162,7 +159,7 @@ public class ManagementUI {
         contentPanel.add(tableScrollPane, BorderLayout.CENTER);
 
         // 하단 회원 등록 버튼 패널
-        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // 가운데 정렬
+        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setBackground(Color.WHITE);
 
         JButton addUserButton = new JButton("회원 등록");
@@ -170,56 +167,54 @@ public class ManagementUI {
         addUserButton.setFocusPainted(false);
         addUserButton.setBackground(Color.BLACK);
         addUserButton.setForeground(Color.WHITE);
-        addUserButton.setPreferredSize(new Dimension(150, 40)); // 버튼 크기 설정
+        addUserButton.setPreferredSize(new Dimension(150, 40));
         footerPanel.add(addUserButton);
 
         contentPanel.add(footerPanel, BorderLayout.SOUTH);
 
+        addUserButton.addActionListener(e -> {
+            frame.dispose();
+            MemberRegistrationUI.show();
+        });
+
         // Filter 버튼 동작 추가
-        filterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 체크박스를 통한 필터 선택
-                JCheckBox[] checkBoxes = new JCheckBox[columnNames.length];
-                JPanel filterPanel = new JPanel(new GridLayout(columnNames.length, 1));
-                for (int i = 0; i < columnNames.length; i++) {
-                    checkBoxes[i] = new JCheckBox(columnNames[i], true); // 기본값: 체크 상태
-                    filterPanel.add(checkBoxes[i]);
+        filterButton.addActionListener(e -> {
+            JCheckBox[] checkBoxes = new JCheckBox[columnNames.length];
+            JPanel filterPanel = new JPanel(new GridLayout(columnNames.length, 1));
+            for (int i = 0; i < columnNames.length; i++) {
+                checkBoxes[i] = new JCheckBox(columnNames[i], true);
+                filterPanel.add(checkBoxes[i]);
+            }
+
+            int result = JOptionPane.showConfirmDialog(frame, filterPanel, "필터 선택", JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                ArrayList<Integer> selectedColumns = new ArrayList<>();
+                for (int i = 0; i < checkBoxes.length; i++) {
+                    if (checkBoxes[i].isSelected()) {
+                        selectedColumns.add(i);
+                    }
                 }
 
-                int result = JOptionPane.showConfirmDialog(frame, filterPanel, "필터 선택", JOptionPane.OK_CANCEL_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    // 선택된 열로 새 데이터 모델 생성
-                    ArrayList<Integer> selectedColumns = new ArrayList<>();
-                    for (int i = 0; i < checkBoxes.length; i++) {
-                        if (checkBoxes[i].isSelected()) {
-                            selectedColumns.add(i);
-                        }
-                    }
-
-                    DefaultTableModel newModel = new DefaultTableModel();
-                    for (int colIndex : selectedColumns) {
-                        newModel.addColumn(columnNames[colIndex]);
-                    }
-
-                    for (Object[] row : data) {
-                        Object[] filteredRow = new Object[selectedColumns.size()];
-                        for (int i = 0; i < selectedColumns.size(); i++) {
-                            filteredRow[i] = row[selectedColumns.get(i)];
-                        }
-                        newModel.addRow(filteredRow);
-                    }
-                    userTable.setModel(newModel);
+                DefaultTableModel newModel = new DefaultTableModel();
+                for (int colIndex : selectedColumns) {
+                    newModel.addColumn(columnNames[colIndex]);
                 }
+
+                for (Object[] row : data) {
+                    Object[] filteredRow = new Object[selectedColumns.size()];
+                    for (int i = 0; i < selectedColumns.size(); i++) {
+                        filteredRow[i] = row[selectedColumns.get(i)];
+                    }
+                    newModel.addRow(filteredRow);
+                }
+                userTable.setModel(newModel);
             }
         });
 
-        // 프레임에 메뉴 패널과 콘텐츠 패널 추가
         frame.add(menuPanel, BorderLayout.WEST);
         frame.add(contentPanel, BorderLayout.CENTER);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
 }
