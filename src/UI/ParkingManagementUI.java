@@ -53,7 +53,7 @@ public class ParkingManagementUI {
                 frame.dispose();
                 switch (item) {
                     case "회원 정보":
-                        GUI.ManagementUI.show(); // 회원 정보 UI 호출
+                        ManagementUI.show(); // 회원 정보 UI 호출
                         break;
                     case "주차장 관리 점검 기록":
                         show(); // 주차장 관리 점검 기록 UI 호출

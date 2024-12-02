@@ -80,7 +80,7 @@ public class Login {
         // 로그인 버튼 클릭 시 동작
         signInButton.addActionListener(e -> {
             frame.dispose(); // 로그인 창 닫기
-            GUI.ManagementUI.show(); // 관리 UI 실행
+            ManagementUI.show(); // 관리 UI 실행
         });
 
         // 버튼 마우스 오버 효과 추가
