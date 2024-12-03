@@ -2,8 +2,9 @@ package DTO;
 
 public class ParkingDTO {
     private String spaceNumber;
-    private String parkingLotId;
-    private String availability;
+    private String parkingSpaceId;
+    private String availabilityMax;
+    private String availabilityNow;
 
     public String getSpaceNumber() {
         return spaceNumber;
@@ -13,19 +14,27 @@ public class ParkingDTO {
         this.spaceNumber = spaceNumber;
     }
 
-    public String getParkingLotId() {
-        return parkingLotId;
+    public String getParkingSpaceId() {
+        return parkingSpaceId;
     }
 
-    public void setParkingLotId(String parkingLotId) {
-        this.parkingLotId = parkingLotId;
+    public void setParkingSpaceId(String parkingSpaceId) {
+        this.parkingSpaceId = parkingSpaceId;
     }
 
-    public String getAvailability() {
-        return availability;
+    public String getAvailabilityMax() {
+        return availabilityMax;
     }
 
-    public void setAvailability(String availability) {
-        this.availability = availability;
+    public void setAvailabilityMax(String availabilityMax) {
+        this.availabilityMax = availabilityMax;
+    }
+
+    public String getAvailabilityNow() {
+        return availabilityNow;
+    }
+
+    public void setAvailabilityNow(String availabilityNow) {
+        this.availabilityNow = availabilityNow;
     }
 }
