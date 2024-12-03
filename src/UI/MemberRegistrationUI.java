@@ -3,7 +3,6 @@ package UI;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class MemberRegistrationUI {
     public static void show() {
@@ -11,7 +10,6 @@ public class MemberRegistrationUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         frame.setLayout(new BorderLayout());
-
 
         // 좌측 메뉴 패널
         JPanel menuPanel = new JPanel();
@@ -80,17 +78,27 @@ public class MemberRegistrationUI {
         contentPanel.add(titleLabel, BorderLayout.NORTH);
 
         // 회원 등록 폼
-        JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // 3행 2열로 설정
         formPanel.setBackground(Color.WHITE);
 
         String[] labels = {"회원 ID", "이름", "생년월일", "연락처", "주소", "소속"};
         for (String label : labels) {
+            JPanel fieldPanel = new JPanel(new BorderLayout()); // 각 필드를 위한 패널
+            fieldPanel.setBackground(Color.WHITE); // 흰색 배경
+
             JLabel fieldLabel = new JLabel(label);
             fieldLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
             JTextField textField = new JTextField();
-            textField.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
-            formPanel.add(fieldLabel);
-            formPanel.add(textField);
+            textField.setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
+            textField.setPreferredSize(new Dimension(150, 25)); // 텍스트 필드의 크기
+
+            fieldPanel.add(fieldLabel, BorderLayout.NORTH); // 레이블을 위에 배치
+            fieldPanel.add(textField, BorderLayout.CENTER); // 텍스트 필드를 아래에 배치
+
+            // 패널 크기 조정
+            fieldPanel.setPreferredSize(new Dimension(400, 50)); // 각 필드 패널의 크기 조정
+
+            formPanel.add(fieldPanel); // 폼에 추가
         }
 
         contentPanel.add(formPanel, BorderLayout.CENTER);
