@@ -3,7 +3,7 @@ package DTO;
 public class LongStayCarDTO {
     private String stayId;
     private String carNumber;
-    private String parkingLotId;
+    private String parkingSpaceId;
     private String spaceId;
     private String entryTime;
     private String stayTime;
@@ -21,11 +21,11 @@ public class LongStayCarDTO {
     public void setCarNumber(String carNumber) {
         this.carNumber = carNumber;
     }
-    public String getParkingLotId() {
-        return parkingLotId;
+    public String getParkingSpaceId() {
+        return parkingSpaceId;
     }
-    public void setParkingLotId(String parkingLotId) {
-        this.parkingLotId = parkingLotId;
+    public void setParkingSpaceId(String parkingSpaceId) {
+        this.parkingSpaceId = parkingSpaceId;
     }
     public String getSpaceId() {
         return spaceId;
