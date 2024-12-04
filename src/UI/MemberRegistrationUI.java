@@ -1,9 +1,14 @@
 package UI;
 
+import DTO.MemberDTO;
+import DAO.MemberDAO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 public class MemberRegistrationUI {
     public static void show() {
         JFrame frame = new JFrame("회원 등록");
@@ -81,8 +86,19 @@ public class MemberRegistrationUI {
         JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // 3행 2열로 설정
         formPanel.setBackground(Color.WHITE);
 
-        String[] labels = {"회원 ID", "이름", "생년월일", "연락처", "주소", "소속"};
-        JTextField[] textFields = new JTextField[6];  // 텍스트 필드를 저장할 배열
+        // 회원 정보를 입력받을 텍스트 필드들
+        JTextField memberIdField = new JTextField();
+        JTextField nameField = new JTextField();
+        JTextField birthDateField = new JTextField(); // 예: "yyyy-MM-dd" 형식으로 입력
+        JTextField phoneField = new JTextField();
+        JTextField affiliationField = new JTextField();
+        JTextField affiliationNumberField = new JTextField();
+        JTextField addressField = new JTextField();
+        JTextField usageTypeField = new JTextField();
+
+        // 각 필드 레이블 추가
+        String[] labels = {"회원 ID", "이름", "생년월일 (yyyy-MM-dd)", "연락처", "소속", "소속번호", "주소", "이용형태"};
+        JTextField[] fields = {memberIdField, nameField, birthDateField, phoneField, affiliationField, affiliationNumberField, addressField, usageTypeField};
 
         for (int i = 0; i < labels.length; i++) {
             JPanel fieldPanel = new JPanel(new BorderLayout()); // 각 필드를 위한 패널
@@ -90,16 +106,8 @@ public class MemberRegistrationUI {
 
             JLabel fieldLabel = new JLabel(labels[i]);
             fieldLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
-            textFields[i] = new JTextField();
-            textFields[i].setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
-            textFields[i].setPreferredSize(new Dimension(150, 25)); // 텍스트 필드의 크기
-
             fieldPanel.add(fieldLabel, BorderLayout.NORTH); // 레이블을 위에 배치
-            fieldPanel.add(textFields[i], BorderLayout.CENTER); // 텍스트 필드를 아래에 배치
-
-            // 패널 크기 조정
-            fieldPanel.setPreferredSize(new Dimension(400, 50)); // 각 필드 패널의 크기 조정
-
+            fieldPanel.add(fields[i], BorderLayout.CENTER); // 텍스트 필드를 아래에 배치
             formPanel.add(fieldPanel); // 폼에 추가
         }
 
@@ -114,30 +122,52 @@ public class MemberRegistrationUI {
         registerButton.setBackground(Color.BLACK);
         registerButton.setForeground(Color.WHITE);
         registerButton.setPreferredSize(new Dimension(150, 40));
-        buttonPanel.add(registerButton);
 
-        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        // 회원 등록 버튼 클릭 시 동작 추가
+        // 회원 등록 버튼 클릭 시 처리
         registerButton.addActionListener(e -> {
-            String memberId = textFields[0].getText();
-            String name = textFields[1].getText();
-            String birthDate = textFields[2].getText();
-            String phone = textFields[3].getText();
-            String address = textFields[4].getText();
-            String affiliation = textFields[5].getText();
+            String memberId = memberIdField.getText();
+            String name = nameField.getText();
+            String birthDateStr = birthDateField.getText();
+            String phone = phoneField.getText();
+            String affiliation = affiliationField.getText();
+            String affiliationNumber = affiliationNumberField.getText();
+            String address = addressField.getText();
+            String usageType = usageTypeField.getText();
 
-            // 회원 ID와 이름이 필수로 입력되어야 함
-            if (memberId.isEmpty() || name.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "회원 ID와 이름은 필수 입력 항목입니다.", "경고", JOptionPane.WARNING_MESSAGE);
-            } else {
-                // 나머지 필드는 비어 있을 수 있음
-                // 회원 등록 완료 메시지
-                JOptionPane.showMessageDialog(frame, "회원 등록이 완료되었습니다.", "등록 완료", JOptionPane.INFORMATION_MESSAGE);
+            // 날짜 변환
+            Date birthDate = null;
+            try {
+                if (!birthDateStr.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    birthDate = sdf.parse(birthDateStr);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
-                // 이후, 회원 등록 정보를 DB에 저장하는 로직을 추가해야 함 (예: DAO 호출)
+            // MemberDTO 객체 생성
+            MemberDTO memberDTO = new MemberDTO();
+            memberDTO.setMemberId(memberId);
+            memberDTO.setName(name);
+            memberDTO.setBirthDate(birthDate);
+            memberDTO.setPhone(phone);
+            memberDTO.setAffiliation(affiliation);
+            memberDTO.setAffiliationNumber(affiliationNumber);
+            memberDTO.setAddress(address);
+            memberDTO.setUsageType(usageType);
+
+            // 회원 등록 처리
+            MemberDAO memberDAO = new MemberDAO();
+            try {
+                String message = memberDAO.registerMember(memberDTO);
+                JOptionPane.showMessageDialog(frame, message);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "회원 등록에 실패했습니다: " + ex.getMessage());
             }
         });
+
+        buttonPanel.add(registerButton);
+        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // 프레임 표시
         frame.setLocationRelativeTo(null);
