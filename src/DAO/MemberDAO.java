@@ -1,7 +1,7 @@
 package DAO;
 
 import DTO.MemberDTO;
-import DB.DB_Conn_Query;
+import DB.DB_Conn;
 import java.sql.*;
 
 public class MemberDAO {
@@ -9,7 +9,7 @@ public class MemberDAO {
         String resultMessage;
 
         // DB 연결 객체 가져오기
-        DB_Conn_Query dbConn = new DB_Conn_Query();
+        DB_Conn dbConn = new DB_Conn();
         dbConn.DB_Connect(); // DB 연결 초기화
         Connection connection = dbConn.getConnection(); // DB 연결 가져오기
 

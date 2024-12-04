@@ -2,13 +2,13 @@ package DB;
 
 import java.sql.*;
 
-public class DB_Conn_Query {
+public class DB_Conn {
     private Connection con = null;
     private String url = "jdbc:oracle:thin:@localhost:1521:XE";
     private String id = "DEUDB";
     private String password = "1234";
 
-    public DB_Conn_Query() {
+    public DB_Conn() {
         // 드라이버 적재
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
