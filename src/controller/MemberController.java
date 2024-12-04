@@ -1,7 +1,7 @@
 package controller;
 
 import DTO.MemberDTO;
-import SERVICE.MemberService;
+import service.MemberService;
 
 public class MemberController {
     private final MemberService memberService;
