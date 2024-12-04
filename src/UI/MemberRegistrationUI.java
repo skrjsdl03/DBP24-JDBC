@@ -82,18 +82,20 @@ public class MemberRegistrationUI {
         formPanel.setBackground(Color.WHITE);
 
         String[] labels = {"회원 ID", "이름", "생년월일", "연락처", "주소", "소속"};
-        for (String label : labels) {
+        JTextField[] textFields = new JTextField[6];  // 텍스트 필드를 저장할 배열
+
+        for (int i = 0; i < labels.length; i++) {
             JPanel fieldPanel = new JPanel(new BorderLayout()); // 각 필드를 위한 패널
             fieldPanel.setBackground(Color.WHITE); // 흰색 배경
 
-            JLabel fieldLabel = new JLabel(label);
+            JLabel fieldLabel = new JLabel(labels[i]);
             fieldLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
-            JTextField textField = new JTextField();
-            textField.setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
-            textField.setPreferredSize(new Dimension(150, 25)); // 텍스트 필드의 크기
+            textFields[i] = new JTextField();
+            textFields[i].setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
+            textFields[i].setPreferredSize(new Dimension(150, 25)); // 텍스트 필드의 크기
 
             fieldPanel.add(fieldLabel, BorderLayout.NORTH); // 레이블을 위에 배치
-            fieldPanel.add(textField, BorderLayout.CENTER); // 텍스트 필드를 아래에 배치
+            fieldPanel.add(textFields[i], BorderLayout.CENTER); // 텍스트 필드를 아래에 배치
 
             // 패널 크기 조정
             fieldPanel.setPreferredSize(new Dimension(400, 50)); // 각 필드 패널의 크기 조정
@@ -115,6 +117,27 @@ public class MemberRegistrationUI {
         buttonPanel.add(registerButton);
 
         contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        // 회원 등록 버튼 클릭 시 동작 추가
+        registerButton.addActionListener(e -> {
+            String memberId = textFields[0].getText();
+            String name = textFields[1].getText();
+            String birthDate = textFields[2].getText();
+            String phone = textFields[3].getText();
+            String address = textFields[4].getText();
+            String affiliation = textFields[5].getText();
+
+            // 회원 ID와 이름이 필수로 입력되어야 함
+            if (memberId.isEmpty() || name.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "회원 ID와 이름은 필수 입력 항목입니다.", "경고", JOptionPane.WARNING_MESSAGE);
+            } else {
+                // 나머지 필드는 비어 있을 수 있음
+                // 회원 등록 완료 메시지
+                JOptionPane.showMessageDialog(frame, "회원 등록이 완료되었습니다.", "등록 완료", JOptionPane.INFORMATION_MESSAGE);
+
+                // 이후, 회원 등록 정보를 DB에 저장하는 로직을 추가해야 함 (예: DAO 호출)
+            }
+        });
 
         // 프레임 표시
         frame.setLocationRelativeTo(null);
