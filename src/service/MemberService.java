@@ -1,4 +1,5 @@
 package service;
+//비즈니스 로직 처리 , 컨트롤러와 데이터 계층 사이 연결
 
 import DAO.MemberDAO;
 import DTO.MemberDTO;

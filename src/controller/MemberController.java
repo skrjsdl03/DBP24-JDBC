@@ -1,5 +1,5 @@
 package controller;
-
+//클라이언트 요청 처리
 import DTO.MemberDTO;
 import service.MemberService;
 
