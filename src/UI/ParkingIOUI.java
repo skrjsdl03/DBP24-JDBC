@@ -6,6 +6,7 @@ import java.awt.*;
 public class ParkingIOUI extends JPanel {
 
     private JPanel titlePanel; // 타이틀 패널을 멤버 변수로 선언
+    private JButton entryButton; // 입차 버튼을 멤버 변수로 선언
 
     public ParkingIOUI() {
         setLayout(null); // null 레이아웃 사용
@@ -28,7 +29,7 @@ public class ParkingIOUI extends JPanel {
         titleLabel.setBounds(0, 0, 480, 30);
         titlePanel.add(titleLabel);
 
-        JButton entryButton = new JButton("입차하기");
+        entryButton = new JButton("입차하기"); // 입차 버튼을 멤버 변수로 선언
         JButton exitButton = new JButton("출차하기");
 
         // 버튼 스타일 설정
@@ -106,6 +107,9 @@ public class ParkingIOUI extends JPanel {
         add(entryPanel);
         revalidate();
         repaint();
+
+        // 입차 버튼을 밝은 회색으로 설정
+        entryButton.setBackground(Color.LIGHT_GRAY); // 입차 버튼을 밝은 회색으로 설정
     }
 
     private void showExitPanel() {

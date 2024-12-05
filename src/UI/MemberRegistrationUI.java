@@ -11,17 +11,28 @@ import java.text.SimpleDateFormat;
 public class MemberRegistrationUI extends JPanel {
 
     public MemberRegistrationUI(JPanel mainPanel) {
-        setLayout(new BorderLayout());
+        setLayout(null); // Null 레이아웃으로 설정하여 setBounds 사용 가능하도록 함
+        setPreferredSize(new Dimension(1000, 600)); // 패널 크기 설정
+
+        // 배경 패널 생성
+        JPanel backgroundPanel = new JPanel();
+        backgroundPanel.setLayout(null);
+        backgroundPanel.setBounds(0, 0, 1000, 600);
+        backgroundPanel.setBackground(Color.WHITE); // 배경색 흰색으로 설정
+        add(backgroundPanel); // 배경 패널 추가
 
         JLabel titleLabel = new JLabel("회원 등록하기");
         titleLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 24));
-        titleLabel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        add(titleLabel, BorderLayout.NORTH);
+        titleLabel.setBounds(20, 20, 300, 40); // 위치 설정
+        backgroundPanel.add(titleLabel);
 
-        JPanel formPanel = new JPanel(new GridLayout(8, 2, 10, 10));
+        // 폼 패널 생성
+        JPanel formPanel = new JPanel(new GridLayout(4, 4, 10, 10)); // 4행 4열 그리드 레이아웃 사용
+        formPanel.setBounds(20, 80, 750, 200); // 위치와 크기 설정
         formPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        formPanel.setBackground(Color.WHITE); // 폼 패널 배경색 흰색으로 설정
 
-        String[] labels = {"회원 ID", "이름", "생년월일 (yyyy-MM-dd)", "연락처", "소속", "소속번호", "주소", "이용형태"};
+        String[] labels = {"회원 ID", "이름", "생년월일", "연락처", "소속", "소속번호", "주소", "이용형태"};
         JTextField[] fields = new JTextField[labels.length];
 
         for (int i = 0; i < labels.length; i++) {
@@ -31,21 +42,48 @@ public class MemberRegistrationUI extends JPanel {
             JTextField field = new JTextField();
             fields[i] = field;
 
+            // 생년월일 필드에 플레이스홀더 설정
+            if (i == 2) {
+                field.setText("yyyy-mm-dd");
+                field.setForeground(Color.GRAY); // 회색 글자 설정
+
+                // 클릭 시 플레이스홀더 텍스트 제거
+                field.addFocusListener(new java.awt.event.FocusAdapter() {
+                    public void focusGained(java.awt.event.FocusEvent evt) {
+                        if (field.getText().equals("yyyy-mm-dd")) {
+                            field.setText("");
+                            field.setForeground(Color.BLACK); // 기본 글자색으로 변경
+                        }
+                    }
+
+                    public void focusLost(java.awt.event.FocusEvent evt) {
+                        if (field.getText().isEmpty()) {
+                            field.setForeground(Color.GRAY);
+                            field.setText("yyyy-mm-dd");
+                        }
+                    }
+                });
+            }
+
             formPanel.add(label);
             formPanel.add(field);
         }
-        add(formPanel, BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        backgroundPanel.add(formPanel); // 폼 패널 추가
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(null); // null 레이아웃 사용
+        buttonPanel.setBounds(20, 400, 750, 50); // 위치와 크기 설정
         buttonPanel.setBackground(Color.WHITE);
 
         JButton registerButton = new JButton("회원 등록");
         registerButton.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
         registerButton.setBackground(Color.BLACK);
         registerButton.setForeground(Color.WHITE);
+        registerButton.setBounds(280, 0, 150, 40); // 위치 설정
         buttonPanel.add(registerButton);
 
-        add(buttonPanel, BorderLayout.SOUTH);
+        backgroundPanel.add(buttonPanel); // 버튼 패널 추가
 
         // 회원 등록 버튼 동작
         registerButton.addActionListener(e -> {
@@ -55,7 +93,7 @@ public class MemberRegistrationUI extends JPanel {
                 memberDTO.setName(fields[1].getText());
 
                 String birthDateStr = fields[2].getText();
-                if (!birthDateStr.isEmpty()) {
+                if (!birthDateStr.isEmpty() && !birthDateStr.equals("yyyy-mm-dd")) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     memberDTO.setBirthDate(sdf.parse(birthDateStr));
                 }
@@ -74,18 +112,5 @@ public class MemberRegistrationUI extends JPanel {
                 JOptionPane.showMessageDialog(this, "회원 등록에 실패했습니다: " + ex.getMessage());
             }
         });
-
-        JButton backButton = new JButton("뒤로가기");
-        backButton.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
-        backButton.setBackground(Color.GRAY);
-        backButton.setForeground(Color.WHITE);
-        buttonPanel.add(backButton);
-
-        // 뒤로 가기 버튼 동작
-        backButton.addActionListener(e -> {
-            CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
-            cardLayout.show(mainPanel, "ManagementUI"); // ManagementUI로 전환
-        });
-
     }
 }

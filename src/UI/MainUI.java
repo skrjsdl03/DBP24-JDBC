@@ -75,11 +75,23 @@ public class MainUI {
             menuButton.setBackground(Color.WHITE);
             menuButton.setFont(new Font("Malgun Gothic", Font.PLAIN, 14));
             menuButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            menuButton.setPreferredSize(new Dimension(200, 40));
+            menuButton.setPreferredSize(new Dimension(200, 50)); // 버튼 크기를 일정하게 설정
 
             // 메뉴 버튼 클릭 시 해당 UI를 카드 레이아웃에서 전환하여 보여주기
             menuButton.addActionListener(e -> {
                 CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+
+                // 모든 메뉴 버튼의 배경색을 기본 색으로 설정
+                for (Component comp : menuPanel.getComponents()) {
+                    if (comp instanceof JButton) {
+                        comp.setBackground(Color.WHITE);
+                    }
+                }
+
+                // 클릭된 버튼의 배경색을 밝은 회색으로 변경
+                menuButton.setBackground(Color.LIGHT_GRAY);
+
+                // 선택된 메뉴에 따라 다른 패널을 표시
                 switch (item) {
                     case "차량 입차/출차":
                         cardLayout.show(mainPanel, "ParkingIOUI");
@@ -105,6 +117,10 @@ public class MainUI {
             // 메뉴 패널에 버튼을 추가
             menuPanel.add(menuButton);
         }
+
+        // 처음 화면이 출력될 때 "차량 입차/출차" 버튼의 배경색을 밝은 회색으로 설정
+        JButton firstButton = (JButton) menuPanel.getComponent(1); // 첫 번째 메뉴 버튼
+        firstButton.setBackground(Color.LIGHT_GRAY);
 
         // 프레임에 메뉴 패널과 메인 패널 추가
         frame.add(menuPanel, BorderLayout.WEST);
