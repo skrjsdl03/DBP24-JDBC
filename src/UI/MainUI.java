@@ -14,10 +14,17 @@ public class MainUI {
         frame.setSize(1000, 600);
         frame.setLayout(new BorderLayout());
 
+        // 프레임 배경 색상을 흰색으로 설정
+        frame.getContentPane().setBackground(Color.WHITE);
+
         // 메인 패널에 CardLayout 사용
         JPanel mainPanel = new JPanel(new CardLayout());
+        mainPanel.setBackground(Color.WHITE); // 메인 패널 배경 색상도 흰색으로 설정
 
         // 각 UI 패널 생성 후 메인 패널에 추가
+        ParkingIOUI parkingIOUI = new ParkingIOUI(); // 차량 입차/출차 UI
+        mainPanel.add(parkingIOUI, "ParkingIOUI");
+
         ManagementUI managementUI = new ManagementUI(mainPanel); // 회원 정보 UI
         mainPanel.add(managementUI, "ManagementUI");
 
@@ -50,8 +57,9 @@ public class MainUI {
         menuTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         menuPanel.add(menuTitle);
 
-        // 메뉴 항목 정의
+        // 메뉴 항목 정의 (차량 입차/출차를 맨 위로 이동)
         String[] menuItems = {
+                "차량 입차/출차", // 맨 위로 이동
                 "회원 정보",
                 "주차장 관리 점검 기록",
                 "주차요금 계산",
@@ -73,6 +81,9 @@ public class MainUI {
             menuButton.addActionListener(e -> {
                 CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
                 switch (item) {
+                    case "차량 입차/출차":
+                        cardLayout.show(mainPanel, "ParkingIOUI");
+                        break;
                     case "회원 정보":
                         cardLayout.show(mainPanel, "ManagementUI");
                         break;
@@ -101,5 +112,9 @@ public class MainUI {
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new MainUI();
     }
 }
