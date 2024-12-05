@@ -28,20 +28,18 @@ public class ManagementUI extends JPanel {
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
         searchPanel.setBackground(Color.WHITE);
 
-        JTextField searchField = new JTextField(20);
-        searchField.setText("검색");
-        searchField.setForeground(Color.GRAY);
+        JTextField searchField = new JTextField(15);
         addPlaceholder(searchField, "검색");
 
-        JButton searchButton = new JButton("검색");
-        styleButton(searchButton);
-
-        JButton filterButton = new JButton("Filter");
-        styleButton(filterButton);
-
+        JButton searchButton = createStyledButton("검색");
+        searchButton.setPreferredSize(new Dimension(62, 30)); // 버튼 크기 설정
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
+
+        JButton filterButton = createStyledButton("Filter");
+        filterButton.setPreferredSize(new Dimension(65, 30)); // 버튼 크기 설정
         searchPanel.add(filterButton);
+
         headerPanel.add(searchPanel, BorderLayout.EAST);
 
         // 데이터 테이블
@@ -84,6 +82,16 @@ public class ManagementUI extends JPanel {
         add(contentPanel, BorderLayout.CENTER);
     }
 
+    private JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        button.setFocusPainted(false);
+        button.setBackground(Color.BLACK);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Malgun Gothic", Font.PLAIN, 14));
+        button.setPreferredSize(new Dimension(100, 30)); // 버튼 크기 설정
+        return button;
+    }
+
     private void styleButton(JButton button) {
         button.setFont(new Font("Malgun Gothic", Font.PLAIN, 14));
         button.setFocusPainted(false);
@@ -93,6 +101,8 @@ public class ManagementUI extends JPanel {
     }
 
     private void addPlaceholder(JTextField textField, String placeholder) {
+        textField.setText(placeholder);
+        textField.setForeground(Color.GRAY);
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (textField.getText().equals(placeholder)) {

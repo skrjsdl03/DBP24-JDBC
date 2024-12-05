@@ -44,6 +44,10 @@ public class MainUI {
         MemberRegistrationUI memberRegistrationUI = new MemberRegistrationUI(mainPanel); // 회원 등록 UI
         mainPanel.add(memberRegistrationUI, "MemberRegistrationUI");
 
+        // 차량 경고 등록 UI 추가
+        VehicleWarningUI vehicleWarningUI = new VehicleWarningUI(mainPanel); // 차량 경고 등록 UI
+        mainPanel.add(vehicleWarningUI, "VehicleWarningUI");
+
         // 왼쪽 메뉴 패널 생성
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
@@ -64,7 +68,8 @@ public class MainUI {
                 "주차장 관리 점검 기록",
                 "주차요금 계산",
                 "차량 입출차 기록",
-                "주차장 현황"
+                "주차장 현황",
+                "차량 경고 등록" // 차량 경고 등록 추가
         };
 
         // 각 메뉴 항목에 대해 버튼을 생성
@@ -110,6 +115,9 @@ public class MainUI {
                         break;
                     case "주차장 현황":
                         cardLayout.show(mainPanel, "ParkingStatusUI");
+                        break;
+                    case "차량 경고 등록":
+                        cardLayout.show(mainPanel, "VehicleWarningUI");
                         break;
                 }
             });
