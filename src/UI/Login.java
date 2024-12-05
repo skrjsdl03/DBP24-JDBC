@@ -6,7 +6,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 public class Login {
-    public static void main(String[] args) {
+    public static void show() {
         // UTF-8 인코딩 및 한글 폰트 설정
         UIManager.put("Label.font", new Font("Malgun Gothic", Font.PLAIN, 14));
         UIManager.put("Button.font", new Font("Malgun Gothic", Font.PLAIN, 14));
@@ -19,6 +19,7 @@ public class Login {
     private void createAndShowGUI() {
         // 메인 프레임 생성
         JFrame frame = new JFrame("DEU 주차장 시스템");
+        frame.setUndecorated(true); // 장식 제거
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(360, 400);
         frame.setLayout(null);
@@ -79,8 +80,8 @@ public class Login {
 
         // 로그인 버튼 클릭 시 동작
         signInButton.addActionListener(e -> {
+            new MainUI(); // 관리 UI 실행
             frame.dispose(); // 로그인 창 닫기
-            ManagementUI.show(); // 관리 UI 실행
         });
 
         // 버튼 마우스 오버 효과 추가
@@ -97,7 +98,7 @@ public class Login {
 
         // 프레임 중앙에 표시
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        frame.setVisible(true); // 즉시 표시
     }
 
     // 텍스트 필드에 플레이스홀더 기능 추가

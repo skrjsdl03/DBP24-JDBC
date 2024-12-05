@@ -1,21 +1,22 @@
-package UI;
-
-import javax.swing.*;
-import java.awt.*;
-
-public class ParkingLotStatusUI {
-    public static void show() {
-        JFrame frame = new JFrame("주차장 관리 시스템");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 400);
-        frame.setLayout(new BorderLayout());
-
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setPreferredSize(new Dimension(200, frame.getHeight()));
-        menuPanel.setBackground(Color.WHITE);
-
-        String[] menuItems = {"회원 정보", "주차장 관리 점검 기록", "주차요금 계산", "차량 입출차 기록", "주차장 현황"};
+//package UI;
+//
+//import javax.swing.*;
+//import java.awt.*;
+//
+//public class ParkingLotStatusUI {
+//    public static void show() {
+//        JFrame frame = new JFrame("주차장 관리 시스템");
+//        frame.setUndecorated(true); // 장식 제거
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(800, 400);
+//        frame.setLayout(new BorderLayout());
+//
+//        JPanel menuPanel = new JPanel();
+//        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+//        menuPanel.setPreferredSize(new Dimension(200, frame.getHeight()));
+//        menuPanel.setBackground(Color.WHITE);
+//
+//        String[] menuItems = {"회원 정보", "주차장 관리 점검 기록", "주차요금 계산", "차량 입출차 기록", "주차장 현황"};
 //        for (String item : menuItems) {
 //            JButton menuButton = new JButton(item);
 //            menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -27,13 +28,13 @@ public class ParkingLotStatusUI {
 //                frame.dispose();
 //                switch (item) {
 //                    case "회원 정보":
-//                        MemberRegistrationUI.show();
+//                        //MemberRegistrationUI.show();
 //                        break;
 //                    case "주차장 관리 점검 기록":
 //                        ParkingManagementUI.show();
 //                        break;
 //                    case "주차요금 계산":
-//                        ParkingFeeUI.show();
+//                        //ParkingFeeUI.show();
 //                        break;
 //                    case "차량 입출차 기록":
 //                        ParkingRecordUI.show();
@@ -42,13 +43,17 @@ public class ParkingLotStatusUI {
 //            });
 //            menuPanel.add(menuButton);
 //        }
-
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
-        contentPanel.setBackground(Color.WHITE);
-
-        // 주차장 현황 UI 코드 (생략)...
-
-        frame.setVisible(true);
-    }
-}
+//
+//        JPanel contentPanel = new JPanel();
+//        contentPanel.setLayout(new BorderLayout());
+//        contentPanel.setBackground(Color.WHITE);
+//
+//        // 주차장 현황 UI 코드 (생략)...
+//
+//        frame.add(menuPanel, BorderLayout.WEST); // 메뉴 패널 추가
+//        frame.add(contentPanel, BorderLayout.CENTER); // 콘텐츠 패널 추가
+//
+//        frame.setLocationRelativeTo(null); // 중앙에 위치
+//        frame.setVisible(true); // 즉시 표시
+//    }
+//}
