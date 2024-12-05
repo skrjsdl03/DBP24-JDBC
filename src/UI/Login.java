@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Login {
     public static void show() {
@@ -80,8 +84,16 @@ public class Login {
 
         // 로그인 버튼 클릭 시 동작
         signInButton.addActionListener(e -> {
-            new MainUI(); // 관리 UI 실행
+            String userId = idField.getText();
+            String password = new String(passwordField.getPassword());
+            new MainUI(userId); // 관리 UI 실행, ID를 전달
             frame.dispose(); // 로그인 창 닫기
+//            if (authenticate(userId, password)) { // 인증 성공
+//                new MainUI(userId); // 관리 UI 실행, ID를 전달
+//                frame.dispose(); // 로그인 창 닫기
+//            } else {
+//                JOptionPane.showMessageDialog(frame, "ID 또는 비밀번호가 잘못되었습니다.");
+//            }
         });
 
         // 버튼 마우스 오버 효과 추가
@@ -121,4 +133,19 @@ public class Login {
             }
         });
     }
+
+    // 사용자 인증 메소드
+//    private boolean authenticate(String userId, String password) {
+//        String query = "SELECT * FROM users WHERE user_id = ? AND password = ?";
+//        try (Connection conn = DatabaseConnection.getConnection();
+//             PreparedStatement pstmt = conn.prepareStatement(query)) {
+//            pstmt.setString(1, userId);
+//            pstmt.setString(2, password);
+//            ResultSet rs = pstmt.executeQuery();
+//            return rs.next(); // 결과가 존재하면 인증 성공
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//            return false; // 인증 실패
+//        }
+//    }
 }

@@ -2,10 +2,16 @@ package UI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class VehicleWarningUI extends JPanel {
 
-    public VehicleWarningUI(JPanel mainPanel) {
+    private String userId; // 로그인 시 사용한 ID
+
+    public VehicleWarningUI(JPanel mainPanel, String userId) {
+        this.userId = userId; // 로그인 시 사용한 ID 저장
         setLayout(null);
         setPreferredSize(new Dimension(1000, 600)); // 패널 크기 설정
         setBackground(Color.WHITE); // 배경색을 흰색으로 설정
@@ -51,15 +57,29 @@ public class VehicleWarningUI extends JPanel {
             // 경고 등록 로직
             if (!vehicleId.isEmpty() && !warningReason.isEmpty()) {
                 // 데이터베이스에 경고 등록
-                // 예: warningDAO.addWarning(vehicleId, warningReason);
-                // 트리거가 작동하여 경고 누적 수 증가 및 불이익 단계 변경
-
-                JOptionPane.showMessageDialog(this, "경고가 등록되었습니다.");
-                vehicleIdField.setText(""); // 입력 필드 초기화
-                warningReasonField.setText(""); // 입력 필드 초기화
+                registerWarning(userId, vehicleId, warningReason);
             } else {
                 JOptionPane.showMessageDialog(this, "모든 필드를 입력하세요.");
             }
         });
+    }
+
+    private void registerWarning(String userId, String vehicleId, String warningReason) {
+        // 데이터베이스 연결 및 경고 등록 로직
+        String insertQuery = "INSERT INTO warnings (user_id, vehicle_id, warning_reason, warning_time) VALUES (?, ?, ?, NOW())";
+
+//        try (Connection conn = DatabaseConnection.getConnection(); // DB 연결
+//             PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
+//
+//            pstmt.setString(1, userId);
+//            pstmt.setString(2, vehicleId);
+//            pstmt.setString(3, warningReason);
+//            pstmt.executeUpdate();
+//
+//            JOptionPane.showMessageDialog(this, "경고가 등록되었습니다.");
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "경고 등록에 실패했습니다.");
+//        }
     }
 }

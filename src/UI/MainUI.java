@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainUI {
-    public MainUI() {
+    private String userId; // 로그인한 사용자 ID
+
+    public MainUI(String userId) {
+        this.userId = userId; // 로그인한 사용자 ID 저장
         createAndShowGUI();
     }
 
@@ -45,7 +48,7 @@ public class MainUI {
         mainPanel.add(memberRegistrationUI, "MemberRegistrationUI");
 
         // 차량 경고 등록 UI 추가
-        VehicleWarningUI vehicleWarningUI = new VehicleWarningUI(mainPanel); // 차량 경고 등록 UI
+        VehicleWarningUI vehicleWarningUI = new VehicleWarningUI(mainPanel, userId); // 차량 경고 등록 UI
         mainPanel.add(vehicleWarningUI, "VehicleWarningUI");
 
         // 왼쪽 메뉴 패널 생성
@@ -61,7 +64,7 @@ public class MainUI {
         menuTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         menuPanel.add(menuTitle);
 
-        // 메뉴 항목 정의 (차량 입차/출차를 맨 위로 이동)
+        // 메뉴 항목 정의
         String[] menuItems = {
                 "차량 입차/출차", // 맨 위로 이동
                 "회원 정보",
@@ -139,6 +142,7 @@ public class MainUI {
     }
 
     public static void main(String[] args) {
-        new MainUI();
+        new MainUI("defaultUserId"); // 기본 사용자 ID로 MainUI 실행 (예시)
     }
 }
+
