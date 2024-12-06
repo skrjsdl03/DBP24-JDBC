@@ -1,5 +1,13 @@
 package DTO;
 
+//CREATE TABLE 관리자 (
+//        관리자ID   VARCHAR2(20)    NOT NULL,
+//        PW     VARCHAR2(20)    NOT NULL,
+//        이름     VARCHAR2(50)    NOT NULL,
+//        연락처    VARCHAR2(15),
+//        주소     VARCHAR2(100),
+//        PRIMARY KEY(관리자ID)
+//);
 public class AdminDTO {
     private String adminId;
     private String password;

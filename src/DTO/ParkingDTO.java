@@ -1,4 +1,11 @@
 package DTO;
+//CREATE TABLE 동의대주차장 (
+//        주차장ID VARCHAR2(20)   NOT NULL,
+//        주차장위치 VARCHAR2(50)   NOT NULL,
+//        최대주차가능수 NUMBER,
+//        현재주차가능수 NUMBER,
+//        PRIMARY KEY(주차장ID)
+//);
 
 public class ParkingDTO {
     private String spaceNumber;

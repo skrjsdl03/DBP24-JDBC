@@ -1,13 +1,11 @@
 package DTO;
-import java.util.Date;
 
 public class ParkingTicketDTO {
-    private String ticketId;
-    private String carNumber;
-    private Date validDate;
-    private String issueType;
-    private int amount;
-    private String adminId;
+    private String ticketId;      // 주차권ID
+    private String carNumber; // 차량번호
+    private String isUsed;        // 사용여부
+    private int discountAmount;   // 할인금액
+    private String adminId;       // 관리자ID
 
     public String getTicketId() {
         return ticketId;
@@ -25,28 +23,20 @@ public class ParkingTicketDTO {
         this.carNumber = carNumber;
     }
 
-    public Date getValidDate() {
-        return validDate;
+    public String getIsUsed() {
+        return isUsed;
     }
 
-    public void setValidDate(Date validDate) {
-        this.validDate = validDate;
+    public void setIsUsed(String isUsed) {
+        this.isUsed = this.isUsed;
     }
 
-    public String getIssueType() {
-        return issueType;
+    public int getDiscountAmount() {
+        return discountAmount;
     }
 
-    public void setIssueType(String issueType) {
-        this.issueType = issueType;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setDiscountAmount(int discountAmount) {
+        this.discountAmount = discountAmount;
     }
 
     public String getAdminId() {

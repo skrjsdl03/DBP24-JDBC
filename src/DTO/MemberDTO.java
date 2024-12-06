@@ -1,6 +1,16 @@
 package DTO;
 import java.util.Date;
-
+//CREATE TABLE 등록이용객 (
+//        회원ID   VARCHAR2(20)    NOT NULL,
+//        이름     VARCHAR2(50)    NOT NULL,
+//        생년월일  DATE ,  -- '2024-05-28' <-- 이런식으로 삽입
+//        연락처    VARCHAR2(15),
+//        소속      VARCHAR2(50),
+//        소속번호  VARCHAR2(20),
+//        주소     VARCHAR2(100),
+//        이용형태  VARCHAR2(20),
+//        PRIMARY KEY(회원ID)
+//);
 public class MemberDTO {
     private String memberId;
     private String name;
