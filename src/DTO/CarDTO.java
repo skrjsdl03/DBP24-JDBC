@@ -18,39 +18,30 @@ public class CarDTO {
     public String getCarNumber() {
         return carNumber;
     }
-
     public void setCarNumber(String carNumber) {
         this.carNumber = carNumber;
     }
-
     public String getMemberId() {
         return memberId;
     }
-
     public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
-
     public String getCarType() {
         return carType;
     }
-
     public void setCarType(String carType) {
         this.carType = carType;
     }
-
     public int getWarningCount() {
         return warningCount;
     }
-
     public void setWarningCount(int warningCount) {
         this.warningCount = warningCount;
     }
-
     public int getPenaltyLevel() {
         return penaltyLevel;
     }
-
     public void setPenaltyLevel(int penaltyLevel) {
         this.penaltyLevel = penaltyLevel;
     }
