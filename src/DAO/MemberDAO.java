@@ -5,7 +5,7 @@ import DB.DB_Conn;
 import java.sql.*;
 
 public class MemberDAO {
-    public String registerMember(MemberDTO member) throws Exception {
+    public String registerMember(MemberDTO member) throws SQLException {
         String resultMessage;
 
         // DB 연결 객체 가져오기
