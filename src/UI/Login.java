@@ -79,7 +79,7 @@ public class Login {
         signInButton.setFocusPainted(false);
         signInButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        // 로그인 버튼 클릭 시 동작
+        // 로그인 버튼 클릭 시 동작, DB 연결
         signInButton.addActionListener(e -> {
             String userId = idField.getText();
             String password = new String(passwordField.getPassword());

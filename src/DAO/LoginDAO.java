@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 import DB.DB_Conn;
-
+// 로그인 DB 연결
 public class LoginDAO {
     public boolean authenticate(String adminId, String password) {
         String sql = "{ call admin_Login(?, ?, ?) }"; // 프로시저 호출
