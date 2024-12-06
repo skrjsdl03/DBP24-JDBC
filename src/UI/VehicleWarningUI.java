@@ -2,9 +2,12 @@ package UI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+
+import DAO.MemberDAO;
+import DTO.CarWarningDTO;
+import DAO.CarWarningDAO;
+
+import static java.time.LocalTime.now;
 
 public class VehicleWarningUI extends JPanel {
 
@@ -51,16 +54,32 @@ public class VehicleWarningUI extends JPanel {
 
         // 버튼 클릭 이벤트 처리
         registerButton.addActionListener(e -> {
-            String vehicleId = vehicleIdField.getText();
-            String warningReason = warningReasonField.getText();
+            try {
+                CarWarningDTO carWarningDTO = new CarWarningDTO();
+                carWarningDTO.setWarningId(); //경고ID로 쓸만한거 추천받습니다.
+                carWarningDTO.setAdminId(userId);
+                carWarningDTO.setCarNumber(vehicleIdField.getText());
+                carWarningDTO.setWarningTimestamp(now()); //흠..
+                carWarningDTO.setWarningReason(warningReasonField.getText());
 
-            // 경고 등록 로직
-            if (!vehicleId.isEmpty() && !warningReason.isEmpty()) {
-                // 데이터베이스에 경고 등록
-                registerWarning(userId, vehicleId, warningReason);
-            } else {
-                JOptionPane.showMessageDialog(this, "모든 필드를 입력하세요.");
+
+                CarWarningDAO carWarningDAO = new CarWarningDAO();
+                String message = carWarningDAO.registerWarning(carWarningDTO);
+
+//                JOptionPane.showMessageDialog(this, message);
+            } catch (Exception ex) {
+//                JOptionPane.showMessageDialog(this, "회원 등록에 실패했습니다: " + ex.getMessage());
             }
+//            String vehicleId = vehicleIdField.getText();
+//            String warningReason = warningReasonField.getText();
+//
+//            // 경고 등록 로직
+//            if (!vehicleId.isEmpty() && !warningReason.isEmpty()) {
+//                // 데이터베이스에 경고 등록
+//                registerWarning(userId, vehicleId, warningReason);
+//            } else {
+//                JOptionPane.showMessageDialog(this, "모든 필드를 입력하세요.");
+//            }
         });
     }
 
