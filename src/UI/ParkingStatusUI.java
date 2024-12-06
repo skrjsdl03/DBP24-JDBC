@@ -1,18 +1,18 @@
 package UI;
 
+import DB.DB_Conn; // DB 연결을 위한 클래스
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ParkingStatusUI extends JPanel {
 
     public ParkingStatusUI(JPanel mainPanel) {
-        setLayout(new BorderLayout());
+        setLayout(null); // 절대 위치 배치를 위해 null로 설정
         setBackground(Color.WHITE);
-
-        // 오른쪽 콘텐츠 패널
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
-        contentPanel.setBackground(Color.WHITE);
 
         // 헤더 패널 생성
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -21,90 +21,84 @@ public class ParkingStatusUI extends JPanel {
         titleLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 16));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         headerPanel.add(titleLabel, BorderLayout.WEST);
+        headerPanel.setBounds(20, 10, 300, 40); // 헤더 패널 위치 설정
 
-        // 검색 및 필터 패널
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
-        searchPanel.setBackground(Color.WHITE);
-
-        JTextField searchField = new JTextField(15);
-        addPlaceholder(searchField, "검색");
-        searchPanel.add(searchField);
-
-        // 검색 버튼 추가
-        JButton searchButton = new JButton("검색");
-        searchButton.setFocusPainted(false);
-        searchButton.setBackground(Color.BLACK);
-        searchButton.setForeground(Color.WHITE);
-        searchPanel.add(searchButton);
-
-        // 필터 버튼 추가
-        JButton filterButton = new JButton("Filter");
-        filterButton.setBackground(Color.BLACK);
-        filterButton.setForeground(Color.WHITE);
-        filterButton.setFocusPainted(false);
-        searchPanel.add(filterButton);
-
-        headerPanel.add(searchPanel, BorderLayout.EAST); // 오른쪽에 위치하도록 설정
+        // "모든 주차장" 텍스트 패널 생성
+        JPanel allParkingPanel = new JPanel();
+        allParkingPanel.setBackground(Color.WHITE);
+        JLabel allParkingLabel = new JLabel("모든 주차장", JLabel.CENTER);
+        allParkingLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
+        allParkingLabel.setForeground(Color.BLACK);
+        allParkingPanel.add(allParkingLabel);
+        allParkingPanel.setBounds(250, 70, 300, 40); // 위치 조정
 
         // 상태 표시 패널
         JPanel statusPanel = new JPanel();
-        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.Y_AXIS));
+        statusPanel.setLayout(new GridLayout(0, 3, 10, 10)); // 3열로 구성
         statusPanel.setBackground(Color.WHITE);
         statusPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        statusPanel.setBounds(20, 100, 750, 400); // 위치 및 크기 조정
 
-        JLabel allParkingTitle = new JLabel("모든 주차장", JLabel.CENTER);
-        allParkingTitle.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
-        allParkingTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        statusPanel.add(allParkingTitle);
+        // 주차장 상태 데이터 가져오기
+        loadParkingStatus(statusPanel);
 
-        statusPanel.add(Box.createRigidArea(new Dimension(0, 20))); // 간격 추가
-
-        // 주차장 상태
-        String[] parkingLots = {"A주차장", "B주차장", "C주차장", "D주차장"};
-        String[] statuses = {"원활", "혼잡", "원활", "보통"};
-
-        for (int i = 0; i < parkingLots.length; i++) {
-            JPanel parkingRow = new JPanel();
-            parkingRow.setLayout(new BoxLayout(parkingRow, BoxLayout.X_AXIS));
-            parkingRow.setBackground(Color.WHITE);
-            parkingRow.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            JLabel parkingLabel = new JLabel(parkingLots[i], JLabel.LEFT);
-            parkingLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
-            parkingLabel.setPreferredSize(new Dimension(100, 30));
-            parkingRow.add(parkingLabel);
-
-            JLabel statusLabel = new JLabel(statuses[i], JLabel.LEFT);
-            statusLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
-            parkingRow.add(statusLabel);
-
-            statusPanel.add(parkingRow);
-        }
-
-        contentPanel.add(headerPanel, BorderLayout.NORTH);
-        contentPanel.add(statusPanel, BorderLayout.CENTER);
-
-        // 콘텐츠 패널을 현재 패널에 추가
-        add(contentPanel, BorderLayout.CENTER);
+        // 콘텐츠 패널에 추가
+        add(headerPanel);
+        add(allParkingPanel);
+        add(statusPanel);
     }
 
-    private void addPlaceholder(JTextField textField, String placeholder) {
-        textField.setText(placeholder);
-        textField.setForeground(Color.GRAY);
-        textField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (textField.getText().equals(placeholder)) {
-                    textField.setText("");
-                    textField.setForeground(Color.BLACK);
+    private void loadParkingStatus(JPanel statusPanel) {
+        String query = "SELECT p.주차장위치, p.수용가능차량수 - COUNT(w.차량번호) AS 남은주차공간, p.수용가능차량수 " +
+                "FROM 동의대주차장 p " +
+                "LEFT JOIN 주차 w ON p.주차장ID = w.주차장ID " +
+                "GROUP BY p.주차장위치, p.수용가능차량수";
+
+        DB_Conn dbConn = new DB_Conn(); // DB_Conn 객체 생성
+        dbConn.DB_Connect(); // 데이터베이스 연결
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String parkingLocation = rs.getString("주차장위치");
+                int remainingSpaces = rs.getInt("남은주차공간");
+                int totalCapacity = rs.getInt("수용가능차량수");
+
+                // 색상 결정
+                Color buttonColor;
+                if (remainingSpaces >= (2.0 / 3.0) * totalCapacity) {
+                    buttonColor = Color.GREEN;
+                } else if (remainingSpaces <= (1.0 / 4.0) * totalCapacity) {
+                    buttonColor = Color.RED;
+                } else {
+                    buttonColor = Color.ORANGE;
                 }
+
+                // 주차장 버튼 생성
+                JButton parkingButton = new JButton(parkingLocation + " [남은 자리: " + remainingSpaces + "]");
+                parkingButton.setFont(new Font("Malgun Gothic", Font.PLAIN, 13));
+                parkingButton.setBackground(buttonColor);
+                parkingButton.setForeground(Color.BLACK);
+                parkingButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                parkingButton.setPreferredSize(new Dimension(200, 30));
+
+                // 버튼을 패널에 추가
+                JPanel parkingRow = new JPanel();
+                parkingRow.setLayout(new BoxLayout(parkingRow, BoxLayout.Y_AXIS)); // 세로로 배치
+                parkingRow.setBackground(Color.WHITE);
+                parkingRow.setAlignmentX(Component.CENTER_ALIGNMENT);
+                parkingRow.add(parkingButton);
+
+                statusPanel.add(parkingRow);
             }
 
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (textField.getText().isEmpty()) {
-                    textField.setText(placeholder);
-                    textField.setForeground(Color.GRAY);
-                }
-            }
-        });
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "주차장 정보를 불러오는 데 실패했습니다.");
+        } finally {
+            dbConn.closeConnection(); // 데이터베이스 연결 종료
+        }
     }
 }
