@@ -1,12 +1,8 @@
 package DAO;
 
-import DTO.CarDTO;
 import DTO.MemberDTO;
 import DB.DB_Conn;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 public class MemberDAO {
     public String registerMember(MemberDTO member) throws SQLException {

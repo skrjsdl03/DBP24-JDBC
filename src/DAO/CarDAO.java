@@ -14,7 +14,7 @@ import java.util.List;
 public class CarDAO {
     /** (트랜잭션) 차량 주차 입력 명령어 차량번호, 공간번호, 주차장 ID*/
     public String insertCarParking(String carNumber, String spaceNumber, String parkingSpaceId) throws SQLException {
-        String resultMessage = "";
+        String resultMessage;
         DB_Conn dbConn = new DB_Conn();
 
         // 쿼리 정의
