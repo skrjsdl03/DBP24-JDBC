@@ -37,20 +37,20 @@ public class MemberDAO {
         }
         return resultMessage;
     }
-    public Vector<Vector> allMember() throws SQLException {
-        String resultMessage;
-
-        // DB 연결 객체 가져오기
-        DB_Conn dbConn = new DB_Conn();
-        dbConn.DB_Connect(); // DB 연결 초기화
-        Connection connection = dbConn.getConnection(); // DB 연결 가져오기
-
-        String sql = "select * from 등록이용객";
-        try (PreparedStatement pstmt = connection.prepareCall(sql)) {
-            Vector<Vector> data = new Vector<>();
-        } finally {
-            dbConn.closeConnection(); // DB 연결 종료
-        }
-        return resultMessage;
-    }
+//    public Vector<Vector> allMember() throws SQLException {
+//        String resultMessage;
+//
+//        // DB 연결 객체 가져오기
+//        DB_Conn dbConn = new DB_Conn();
+//        dbConn.DB_Connect(); // DB 연결 초기화
+//        Connection connection = dbConn.getConnection(); // DB 연결 가져오기
+//
+//        String sql = "select * from 등록이용객";
+//        try (PreparedStatement pstmt = connection.prepareCall(sql)) {
+//            Vector<Vector> data = new Vector<>();
+//        } finally {
+//            dbConn.closeConnection(); // DB 연결 종료
+//        }
+//        return resultMessage;
+//    }
 }
