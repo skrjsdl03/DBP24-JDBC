@@ -23,6 +23,14 @@ public class ParkingStatusUI extends JPanel {
         headerPanel.add(titleLabel, BorderLayout.WEST);
         headerPanel.setBounds(20, 10, 300, 40); // 헤더 패널 위치 설정
 
+        // 새로고침 버튼 생성
+        JButton refreshButton = new JButton("새로고침");
+        refreshButton.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
+        refreshButton.setBounds(650, 15, 100, 30); // 위치 설정
+        refreshButton.setBackground(Color.BLACK);
+        refreshButton.setForeground(Color.WHITE);
+        refreshButton.addActionListener(e -> refreshData()); // 새로고침 이벤트 추가
+
         // "모든 주차장" 텍스트 패널 생성
         JPanel allParkingPanel = new JPanel();
         allParkingPanel.setBackground(Color.WHITE);
@@ -44,15 +52,14 @@ public class ParkingStatusUI extends JPanel {
 
         // 콘텐츠 패널에 추가
         add(headerPanel);
+        add(refreshButton); // 새로고침 버튼 추가
         add(allParkingPanel);
         add(statusPanel);
     }
 
     private void loadParkingStatus(JPanel statusPanel) {
-        String query = "SELECT p.주차장위치, p.수용가능차량수 - COUNT(w.차량번호) AS 남은주차공간, p.수용가능차량수 " +
-                "FROM 동의대주차장 p " +
-                "LEFT JOIN 주차 w ON p.주차장ID = w.주차장ID " +
-                "GROUP BY p.주차장위치, p.수용가능차량수";
+        String query = "SELECT p.주차장위치, p.현재주차가능수, p.최대주차가능수 " +
+                "FROM 동의대주차장 p";
 
         DB_Conn dbConn = new DB_Conn(); // DB_Conn 객체 생성
         dbConn.DB_Connect(); // 데이터베이스 연결
@@ -61,10 +68,11 @@ public class ParkingStatusUI extends JPanel {
              PreparedStatement pstmt = conn.prepareStatement(query);
              ResultSet rs = pstmt.executeQuery()) {
 
+            statusPanel.removeAll(); // 기존 내용 제거
             while (rs.next()) {
                 String parkingLocation = rs.getString("주차장위치");
-                int remainingSpaces = rs.getInt("남은주차공간");
-                int totalCapacity = rs.getInt("수용가능차량수");
+                int remainingSpaces = rs.getInt("현재주차가능수");
+                int totalCapacity = rs.getInt("최대주차가능수");
 
                 // 색상 결정
                 Color buttonColor;
@@ -93,6 +101,8 @@ public class ParkingStatusUI extends JPanel {
 
                 statusPanel.add(parkingRow);
             }
+            statusPanel.revalidate(); // 패널 갱신
+            statusPanel.repaint(); // 다시 그리기
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,5 +110,30 @@ public class ParkingStatusUI extends JPanel {
         } finally {
             dbConn.closeConnection(); // 데이터베이스 연결 종료
         }
+    }
+
+    private void refreshData() {
+        DB_Conn dbConn = new DB_Conn(); // DB_Conn 객체 생성
+        dbConn.DB_Connect(); // 데이터베이스 연결
+
+        String updateQuery = "UPDATE 동의대주차장 SET 현재주차가능수 = 최대주차가능수 - " +
+                "(SELECT COUNT(*) FROM 주차 WHERE 주차장ID = 동의대주차장.주차장ID)";
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+
+            pstmt.executeUpdate(); // 업데이트 실행
+            JOptionPane.showMessageDialog(this, "주차장 상태가 업데이트되었습니다.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "주차장 상태 업데이트에 실패했습니다.");
+        } finally {
+            dbConn.closeConnection(); // 데이터베이스 연결 종료
+        }
+
+        // 새로고침 시 상태 패널의 내용을 다시 로드
+        JPanel statusPanel = (JPanel) getComponent(3); // statusPanel 가져오기
+        loadParkingStatus(statusPanel);
     }
 }

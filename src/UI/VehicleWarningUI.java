@@ -56,10 +56,10 @@ public class VehicleWarningUI extends JPanel {
         registerButton.addActionListener(e -> {
             try {
                 CarWarningDTO carWarningDTO = new CarWarningDTO();
-                carWarningDTO.setWarningId(); //경고ID로 쓸만한거 추천받습니다.
+                //carWarningDTO.setWarningId(); //경고ID로 쓸만한거 추천받습니다.
                 carWarningDTO.setAdminId(userId);
                 carWarningDTO.setCarNumber(vehicleIdField.getText());
-                carWarningDTO.setWarningTimestamp(now()); //흠..
+                //carWarningDTO.setWarningTimestamp(now()); //흠..
                 carWarningDTO.setWarningReason(warningReasonField.getText());
 
 

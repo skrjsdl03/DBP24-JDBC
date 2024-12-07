@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Login {
     public static void show() {
@@ -91,6 +93,20 @@ public class Login {
                 JOptionPane.showMessageDialog(frame, "ID 또는 비밀번호가 잘못되었습니다.");
             }
         });
+
+        // 엔터 키로 로그인 버튼 클릭 기능 추가
+        KeyAdapter enterKeyAdapter = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    signInButton.doClick(); // 로그인 버튼 클릭 이벤트 발생
+                }
+            }
+        };
+
+        // 키 리스너 추가
+        idField.addKeyListener(enterKeyAdapter);
+        passwordField.addKeyListener(enterKeyAdapter);
 
         // 버튼 마우스 오버 효과 추가
         signInButton.addMouseListener(new java.awt.event.MouseAdapter() {

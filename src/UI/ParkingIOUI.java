@@ -1,12 +1,19 @@
 package UI;
 
+import DB.DB_Conn; // DB 연결을 위한 클래스
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class ParkingIOUI extends JPanel {
 
     private JPanel titlePanel; // 타이틀 패널을 멤버 변수로 선언
     private JButton entryButton; // 입차 버튼을 멤버 변수로 선언
+    private JTextField carNumberField; // 차량번호 입력 필드
+    private JTextField parkingIdField; // 주차장ID 입력 필드
+    private JTextField spaceNumberField; // 공간번호 입력 필드
 
     public ParkingIOUI() {
         setLayout(null); // null 레이아웃 사용
@@ -81,17 +88,20 @@ public class ParkingIOUI extends JPanel {
         JLabel carNumberLabel = new JLabel("차량번호:");
         carNumberLabel.setBounds(20, 70, 100, 25);
         entryPanel.add(carNumberLabel);
-        entryPanel.add(new JTextField()).setBounds(120, 70, 300, 25);
+        carNumberField = new JTextField(); // 차량번호 입력 필드 초기화
+        entryPanel.add(carNumberField).setBounds(120, 70, 300, 25);
 
         JLabel parkingIdLabel = new JLabel("주차장ID:");
         parkingIdLabel.setBounds(20, 110, 100, 25);
         entryPanel.add(parkingIdLabel);
-        entryPanel.add(new JTextField()).setBounds(120, 110, 300, 25);
+        parkingIdField = new JTextField(); // 주차장ID 입력 필드 초기화
+        entryPanel.add(parkingIdField).setBounds(120, 110, 300, 25);
 
         JLabel spaceNumberLabel = new JLabel("공간번호:");
         spaceNumberLabel.setBounds(20, 150, 100, 25);
         entryPanel.add(spaceNumberLabel);
-        entryPanel.add(new JTextField()).setBounds(120, 150, 300, 25);
+        spaceNumberField = new JTextField(); // 공간번호 입력 필드 초기화
+        entryPanel.add(spaceNumberField).setBounds(120, 150, 300, 25);
 
         // "기입" 버튼 추가 (위치 고정)
         JButton submitButton = new JButton("기입");
@@ -100,6 +110,9 @@ public class ParkingIOUI extends JPanel {
         submitButton.setForeground(Color.WHITE);
         submitButton.setBounds(180, 200, 100, 30); // 위치 고정
         entryPanel.add(submitButton);
+
+        // 기입 버튼 클릭 이벤트 설정
+        submitButton.addActionListener(e -> insertCarEntry());
 
         // 기존 패널 제거 후 새 패널 추가
         removeAll();
@@ -110,6 +123,40 @@ public class ParkingIOUI extends JPanel {
 
         // 입차 버튼을 밝은 회색으로 설정
         entryButton.setBackground(Color.LIGHT_GRAY); // 입차 버튼을 밝은 회색으로 설정
+    }
+
+    private void insertCarEntry() {
+        String carNumber = carNumberField.getText();
+        String parkingId = parkingIdField.getText();
+        String spaceNumber = spaceNumberField.getText();
+
+        // DB 연결 및 데이터 삽입
+        DB_Conn dbConn = new DB_Conn(); // DB 연결 객체 생성
+        dbConn.DB_Connect(); // 데이터베이스 연결
+
+        String query = "INSERT INTO 주차 (차량번호, 공간번호, 주차장ID, 입차일시) VALUES (?, ?, ?, SYSDATE)";
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, carNumber);
+            pstmt.setString(2, spaceNumber);
+            pstmt.setString(3, parkingId);
+            pstmt.executeUpdate(); // 데이터 삽입 실행
+
+            JOptionPane.showMessageDialog(this, "입차 정보가 기입되었습니다."); // 성공 메시지
+
+            // 입력 필드 초기화
+            carNumberField.setText("");
+            parkingIdField.setText("");
+            spaceNumberField.setText("");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "입차 정보 기입에 실패했습니다."); // 실패 메시지
+        } finally {
+            dbConn.closeConnection(); // 데이터베이스 연결 종료
+        }
     }
 
     private void showExitPanel() {
@@ -128,7 +175,8 @@ public class ParkingIOUI extends JPanel {
         JLabel carNumberLabel = new JLabel("차량번호:");
         carNumberLabel.setBounds(20, 70, 100, 25);
         exitPanel.add(carNumberLabel);
-        exitPanel.add(new JTextField()).setBounds(120, 70, 300, 25);
+        JTextField exitCarNumberField = new JTextField(); // 출차 차량번호 입력 필드
+        exitPanel.add(exitCarNumberField).setBounds(120, 70, 300, 25);
 
         // "기입" 버튼 추가 (위치 고정)
         JButton submitButton = new JButton("기입");
